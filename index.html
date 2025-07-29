@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IsiXhosa Flashcards & Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>EasyXhosa</h1>
+        <p>Learn IsiXhosa words with flashcards and test yourself with a quick quiz!</p>
+    </header>
+    <div class="tabs">
+        <div class="tab active" data-tab="flashcards">Flashcards</div>
+        <div class="tab" data-tab="quiz">Quiz</div>
+    </div>
+
+    <div id="flashcards" class="tab-content active">
+        <h2>IsiXhosa Flashcards</h2>
+        <div class="flashcard-container">
+            <div class="flashcard" data-word="Isonka" data-img="bread.png" data-english="Bread">
+                <div class="front">Isonka</div>
+                <div class="back">
+                    <img src="bread.png" alt="Bread" width="80"><br>
+                    Bread
+                </div>
+            </div>
+            <div class="flashcard" data-word="Imoto" data-img="car.png" data-english="Car">
+                <div class="front">Imoto</div>
+                <div class="back">
+                    <img src="car.png" alt="Car" width="80"><br>
+                    Car
+                </div>
+            </div>
+            <div class="flashcard" data-word="Inkukhu" data-img="chicken.png" data-english="Chicken">
+                <div class="front">Inkukhu</div>
+                <div class="back">
+                    <img src="chicken.png" alt="Chicken" width="80"><br>
+                    Chicken
+                </div>
+            </div>
+            <div class="flashcard" data-word="Inja" data-img="dog.png" data-english="Dog">
+                <div class="front">Inja</div>
+                <div class="back">
+                    <img src="dog.png" alt="Dog" width="80"><br>
+                    Dog
+                </div>
+            </div>
+            <div class="flashcard" data-word="Ipensile" data-img="pencil.png" data-english="Pencil">
+                <div class="front">Ipensile</div>
+                <div class="back">
+                    <img src="pencil.png" alt="Pencil" width="80"><br>
+                    Pencil
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz" class="tab-content">
+        <h2>IsiXhosa Quiz</h2>
+        <div class="student-info">
+            <label for="name">First Name:</label>
+            <input type="text" id="name" required>
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" required>
+            <label for="grade">Grade:</label>
+            <select id="grade" required>
+                <option value="">Select Grade</option>
+                <option value="5">Grade 5</option>
+                <option value="6">Grade 6</option>
+            </select>
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+            <button id="startQuiz">Start Quiz</button>
+        </div>
+        <div id="quiz-content" class="hidden">
+            <div class="question">
+                <p>1.1 Ubuti uleqa i_______.<br>
+                <span style="font-style:italic;">Big brother is chasing the _____. </span></p>
+                <img src="chicken.png" alt="Chicken" width="50" style="vertical-align:middle;">
+                <input type="text" id="q1" placeholder="Enter isiXhosa word">
+            </div>
+            <div class="question">
+                <p>1.2 Umama wam undenzela i____ ngoba ndilambile.<br>
+                <span style="font-style:italic;">My mother is making me _____ because I am hungry.</span></p>
+                <img src="bread.png" alt="Bread" width="50" style="vertical-align:middle;">
+                <input type="text" id="q2" placeholder="Enter isiXhosa word">
+            </div>
+            <div class="question">
+                <p>1.3 Utata wam uqhuba i_____ ukuya emsebenzini.<br>
+                <span style="font-style:italic;">My father is driving a ______ to work.</span></p>
+                <img src="car.png" alt="Car" width="50" style="vertical-align:middle;">
+                <input type="text" id="q3" placeholder="Enter isiXhosa word">
+            </div>
+            <div class="question">
+            </div>
+            <button id="submitQuiz" class="mt-3">Submit Quiz</button>
+        </div>
+        <div id="results" class="hidden">
+            <h3>Quiz Results</h3>
+            <p id="resultText"></p>
+            <p id="timeTaken"></p>
+            <p id="completionDate"></p>
+            <p id="studentDetails"></p>
+            <p id="score"></p>
+            <p>A copy of your results has been sent.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 IsiXhosa Language App</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Quiz functionality
+        document.getElementById('startQuiz').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const grade = document.getElementById('grade').value;
+            const gender = document.getElementById('gender').value;
+            if (!name || !surname || !grade || !gender) {
+                alert('Please fill in all student information fields.');
+                return;
+            }
+            document.querySelector('.student-info').classList.add('hidden');
+            document.getElementById('quiz-content').classList.remove('hidden');
+            quizStartTime = new Date();
+        });
+
+        document.getElementById('submitQuiz').addEventListener('click', function() {
+            const quizEndTime = new Date();
+            const timeTaken = Math.floor((quizEndTime - quizStartTime) / 1000);
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const grade = document.getElementById('grade').value;
+            const gender = document.getElementById('gender').value;
+            let score = 0;
+            // Answers: Isonka, Car, Inja, Chicken, Ipensile
+            if (document.getElementById('q1').value.trim().toLowerCase() === 'isonka') score++;
+            if (document.getElementById('q2').value.trim().toLowerCase() === 'car') score++;
+            if (document.getElementById('q3').value.trim().toLowerCase() === 'inja') score++;
+            if (document.getElementById('q4').value.trim().toLowerCase() === 'chicken') score++;
+            if (document.getElementById('q5').value.trim().toLowerCase() === 'ipensile') score++;
+            const percentage = (score / 5) * 100;
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const completionDate = quizEndTime.toLocaleDateString('en-ZA', options);
+            document.getElementById('quiz-content').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('resultText').textContent = `Quiz completed!`;
+            document.getElementById('timeTaken').textContent = `Time taken: ${timeTaken} seconds`;
+            document.getElementById('completionDate').textContent = `Completed on: ${completionDate}`;
+            document.getElementById('studentDetails').textContent = `Student: ${name} ${surname}, Grade ${grade}, ${gender}`;
+            document.getElementById('score').textContent = `Score: ${score}/5 (${percentage}%)`;
+        });
+
+        let quizStartTime;
+
+        // Flashcard flip functionality
+        document.querySelectorAll('.flashcard').forEach(card => {
+            card.addEventListener('click', function() {
+                card.classList.toggle('flipped');
+            });
+        });
+    </script>
+</body>
+</html>
