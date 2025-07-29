@@ -211,8 +211,36 @@
                 document.getElementById('completionDate').textContent = `Completed on: ${completionDate}`;
                 document.getElementById('studentDetails').textContent = `Student: ${name} ${surname}, Grade ${grade}, ${gender}`;
                 document.getElementById('score').textContent = `Score: ${score}/5 (${percentage}%)`;
-                // Optionally show a message from the server
-                // alert(data);
+
+                // Prepare email content
+                const emailSubject = `IsiXhosa Quiz Results - ${name} ${surname}`;
+                const emailBody = `Student: ${name} ${surname}
+Grade: ${grade}
+Gender: ${gender}
+Completion Date: ${completionDate}
+Time Taken: ${timeTaken} seconds
+Score: ${score}/5 (${percentage}%)
+
+Question 1: ${answers[0]} (Correct answer: Inkukhu)
+Question 2: ${answers[1]} (Correct answer: Isonka)
+Question 3: ${answers[2]} (Correct answer: Imoto)
+Question 4: ${answers[3]} (Correct answer: Inja)
+Question 5: ${answers[4]} (Correct answer: Ipensile)`;
+
+                const mailtoLink = `mailto:ramjugernathdipika@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+                // Remove previous button if exists
+                const oldButton = document.getElementById('sendEmailBtn');
+                if (oldButton) oldButton.remove();
+
+                // Add email button
+                const emailButton = document.createElement('button');
+                emailButton.textContent = 'Send Results to Teacher';
+                emailButton.id = 'sendEmailBtn';
+                emailButton.onclick = function() {
+                    window.location.href = mailtoLink;
+                };
+                document.getElementById('results').appendChild(emailButton);
             })
             .catch(error => {
                 alert('Failed to send results. Please try again.');
