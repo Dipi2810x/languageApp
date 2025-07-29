@@ -117,8 +117,8 @@ footer {
     margin-top: 20px;
 }
 .flashcard {
-    width: 160px;
-    height: 200px;
+    width: 220px;
+    height: 280px;
     perspective: 600px;
     cursor: pointer;
     position: relative;
@@ -133,7 +133,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4em;
+    font-size: 2em;
     position: absolute;
     backface-visibility: hidden;
     transition: transform 0.5s;
@@ -152,13 +152,14 @@ footer {
     transform: rotateY(0deg);
 }
 .question img {
-    width: 80px;
+    width: 120px;
     height: auto;
     margin-right: 10px;
     vertical-align: middle;
 }
 .flashcard .back img,
 .flashcard .front img {
-    width: 120px;
+    width: 180px;
     height: auto;
+    max-height: 160px;
 }
