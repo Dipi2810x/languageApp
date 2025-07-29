@@ -100,7 +100,16 @@
                 <input type="text" id="q3" placeholder="Enter isiXhosa word">
             </div>
             <div class="question">
+                <p>1.4 Umama uthenge i_______ kwivenkile yezilwanyana zasekhaya.<br>
+                <span style="font-style:italic;">My mum bought a very big ______ at the pet store.</span></p>
+                <img src="Dog.PNG" alt="dog" width="50" style="vertical-align:middle;">
+                <input type="text" id="q3" placeholder="Enter isiXhosa word">
             </div>
+            <div class="question">
+                <p>1.5 Umtwana ubhala nge_______ esikolweni.<br>
+                <span style="font-style:italic;">The child writes with a  _______ at school.</span></p>
+                <img src="pencil.png" alt="Pencil" width="50" style="vertical-align:middle;">
+                <input type="text" id="q5" placeholder="Enter isiXhosa word">
             <button id="submitQuiz" class="mt-3">Submit Quiz</button>
         </div>
         <div id="results" class="hidden">
@@ -154,22 +163,59 @@
             const grade = document.getElementById('grade').value;
             const gender = document.getElementById('gender').value;
             let score = 0;
+            let answers = [
+                document.getElementById('q1').value.trim(),
+                document.getElementById('q2').value.trim(),
+                document.getElementById('q3').value.trim(),
+                document.getElementById('q4').value.trim(),
+                document.getElementById('q5').value.trim()
+            ];
             // Answers: Isonka, Car, Inja, Chicken, Ipensile
-            if (document.getElementById('q1').value.trim().toLowerCase() === 'isonka') score++;
-            if (document.getElementById('q2').value.trim().toLowerCase() === 'car') score++;
-            if (document.getElementById('q3').value.trim().toLowerCase() === 'inja') score++;
-            if (document.getElementById('q4').value.trim().toLowerCase() === 'chicken') score++;
-            if (document.getElementById('q5').value.trim().toLowerCase() === 'ipensile') score++;
+            if (answers[0].toLowerCase() === 'isonka') score++;
+            if (answers[1].toLowerCase() === 'car') score++;
+            if (answers[2].toLowerCase() === 'inja') score++;
+            if (answers[3].toLowerCase() === 'chicken') score++;
+            if (answers[4].toLowerCase() === 'ipensile') score++;
             const percentage = (score / 5) * 100;
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             const completionDate = quizEndTime.toLocaleDateString('en-ZA', options);
-            document.getElementById('quiz-content').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
-            document.getElementById('resultText').textContent = `Quiz completed!`;
-            document.getElementById('timeTaken').textContent = `Time taken: ${timeTaken} seconds`;
-            document.getElementById('completionDate').textContent = `Completed on: ${completionDate}`;
-            document.getElementById('studentDetails').textContent = `Student: ${name} ${surname}, Grade ${grade}, ${gender}`;
-            document.getElementById('score').textContent = `Score: ${score}/5 (${percentage}%)`;
+
+            // Prepare email data
+            const emailData = {
+                name: name,
+                surname: surname,
+                grade: grade,
+                gender: gender,
+                timeTaken: timeTaken,
+                completionDate: completionDate,
+                score: `${score}/5 (${percentage}%)`,
+                answers: answers
+            };
+
+            // Send results via AJAX to send_email.php
+            fetch('send_email.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Show results after sending email
+                document.getElementById('quiz-content').classList.add('hidden');
+                document.getElementById('results').classList.remove('hidden');
+                document.getElementById('resultText').textContent = `Quiz completed!`;
+                document.getElementById('timeTaken').textContent = `Time taken: ${timeTaken} seconds`;
+                document.getElementById('completionDate').textContent = `Completed on: ${completionDate}`;
+                document.getElementById('studentDetails').textContent = `Student: ${name} ${surname}, Grade ${grade}, ${gender}`;
+                document.getElementById('score').textContent = `Score: ${score}/5 (${percentage}%)`;
+                // Optionally show a message from the server
+                // alert(data);
+            })
+            .catch(error => {
+                alert('Failed to send results. Please try again.');
+            });
         });
 
         let quizStartTime;
